@@ -78,7 +78,7 @@ def segmentation(bil, hdr, rotate_crop_params, lower_pixel_thresh=50, upper_pixe
     colormap = mpl.cm.get_cmap('viridis')
     for n in range(len(spectra_all) - 1):  # plot lower peaks in front (FAPbI purple, MAPbI yellow)
         m = len(spectra_all) - 1 - n
-        rgba = colormap(idx_norms[m])
+        rgba = colormap(1-idx_norms[m])
         spectra = spectra_all[m]
         plt.plot(spectra / spectra.max(), c=rgba)  # plot normalization for visualization
     ax.minorticks_on()
