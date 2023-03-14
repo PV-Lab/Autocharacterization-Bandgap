@@ -32,7 +32,7 @@ Input data should take the form a `.hdr` and `.bil` file, measured by a hyperspe
 
 Once the data files are input, the user must only define a set of crop/rotation parameters to set the vision-segmentation boundaries. The rotate/crop parameters the the form of a dictionary: `rotate_crop_params = {'theta': -0.5, 'x1': 45, 'x2': 830, 'y1': 120, 'y2': 550}`, where `theta` defines the rotation, `x1` and `x2` define the x-limits, and `y1` and `y2` define the y-limits. 
 
-After providing the data files paths and the crop/rotation parameters, the [vision.py](./vision.py) and the [autoextract.py](./autoextract.py) will automatically segment all samples and compute the band gap of each sample, outputting an band gap plot for each sample, as shown below. A `.csv` file of the computed band gaps for each sample are also provided as an output.
+After providing the data files paths and the crop/rotation parameters, the [vision.py](./vision.py) and the [extractor.py](./extractor.py) will automatically segment all samples and compute the band gap of each sample, outputting an band gap plot for each sample, as shown below. A `.csv` file of the computed band gaps for each sample are also provided as an output.
 
 
 | Example #1| Example #2 |
