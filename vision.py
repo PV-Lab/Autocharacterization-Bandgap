@@ -71,7 +71,7 @@ def segmentation(bil, hdr, rotate_crop_params, lower_pixel_thresh=50, upper_pixe
         idx_norm = (drop - idx_min) / (idx_max - idx_min)
         idx_norms.append(idx_norm)
     data = pd.DataFrame(np.concatenate(
-        (np.array(pd.read_csv('wavelength.txt', sep='\t', header=None)[0]).reshape(1, -1), np.array(spectra_all))).T)
+        (np.array(pd.read_csv('data/wavelength.txt', sep='\t', header=None)[0]).reshape(1, -1), np.array(spectra_all))).T)
     data = data.rename(columns={0: 'wavelength'})
     # plot extracted reflectance data from segmented hypercube
     fig, ax = plt.subplots(figsize=(8, 4))
