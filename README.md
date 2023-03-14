@@ -1,32 +1,11 @@
 # Automatic-Band-Gap-Extractor
-
-Author: Alexander (Aleks) E. Siemenn \<asiemnn@mit.edu\>
-
 ______________________________________________
 
 # Table of Contents
-- [How to Cite](#how-to-cite)
 - [Package Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
 
-
-# How to Cite
-
-If you use this package for your research, please cite the following paper:
-
-**Citation:** 
-
-    @article{,
-    author = {},
-    title = {},
-    journal = {},
-    volume = {},
-    number = {},
-    pages = {},
-    year = {},
-    doi = {},
-    URL = {}}
 
 # Description:
 
@@ -49,22 +28,14 @@ Package installation requirements can be found in the [requirements.txt](./requi
 
 A demonstration of using the automatic band gap extractor package can be found in the [example.ipynb](./example.ipynb) file. The automatic band gap extractor code itself can be found in the [extractor.py](./extractor.py) file under the `autoextract()` definition.
 
-Input data should take the form of an (n x m) pandas array with n reflectance data points and (m - 1) measured spectra, where m = 0 is the wavelength. Below is an example of the input data format with 12 measured reflectance spectra and the wavelength values in the m = 0 column:
+Input data should take the form a `.hdr` and `.bil` file, measured by a hyperspectral camera. We provide a test dataset in the [example.ipynb](./example.ipynb) file. Our reflectance spectra are measured using a [Resonon Pika L](https://resonon.com/Pika-L) hyperspectral camera that has a 10,000 point scaling factor for reflectance intensity. Hence, to convert these reflectance spectra from 10,000 percentage points to a decimal $\in [0,1]$, we set `autoextract(intensity_scale=10000)`.
 
-![input](./figs/example-input.png)
+Once the data files are input, the user must only define a set of crop/rotation parameters to set the vision-segmentation boundaries. The rotate/crop parameters the the form of a dictionary: `rotate_crop_params = {'theta': -0.5, 'x1': 45, 'x2': 830, 'y1': 120, 'y2': 550}`, where `theta` defines the rotation, `x1` and `x2` define the x-limits, and `y1` and `y2` define the y-limits. 
 
-Our reflectance spectra are measured using a [Resonon Pika L](https://resonon.com/Pika-L) hyperspectral camera that has a 10,000 point scaling factor for reflectance intensity. Hence, to convert these reflectance spectra from 10,000 percentage points to a decimal $\in [0,1]$, we set `autoextract(intensity_scale=10000)`.
+After providing the data files paths and the crop/rotation parameters, the [vision.py](./vision.py) and the [autoextract.py](./autoextract.py) will automatically segment all samples and compute the band gap of each sample, outputting an band gap plot for each sample, as shown below. A `.csv` file of the computed band gaps for each sample are also provided as an output.
 
-Spectra with only a single peak will output a single band gap value based on the linear regression fit:
 
-<img src="./example-data/example-output/AF_FA0.5Cs0.5PbI3.png" width="40%" />
-
-However, spectra with more than one clear peak will output multiple band gap values, one for each peak based on the linear regression fit:
-
-| Band gap #1| Band gap #2 |
+| Example #1| Example #2 |
 | ---------- | ----------- |
-| <img src="./example-data/example-output/TF_Cs0.25FA0.75PbI3.png" width="100%" /> | <img src="./example-data/example-output/TF_Cs0.25FA0.75PbI3_bandgap2.png" width="100%" /> |
+| <img src="./example-output/20.png" width="100%" /> | <img src="./example-output/66.png" width="100%" /> |
 
-If there are multiple band gap values extracted for a single spectra, the band gap associated with the highest intensity peak signal will be output first as `bandgap0` and the following band gaps will follow this naming convention as `bandgap1`, `bandgap2`, . . . Images illustrating the Tauc plot (black curve), regression fit (dashed blue line), and band gap (red line) will be saved to the `savepath` location specified by the variable in the `autoextract(savepath=)` definition. In this path, a csv file of extracted band gaps will also be saved with each column header representing one of the input spectra from the (n x m) input pandas array and the rows representing each of the extracted band gap values.
-
-![output](./figs/example-output.png)
