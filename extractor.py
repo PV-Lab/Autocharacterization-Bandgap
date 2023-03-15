@@ -1,6 +1,3 @@
-# Author: Alexander (Aleks) E. Siemenn <asiemenn@mit.edu>
-# Date:   04 March 2023
-
 # import
 import warnings
 warnings.filterwarnings("ignore")
