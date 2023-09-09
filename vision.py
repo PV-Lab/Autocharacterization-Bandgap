@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from scipy import ndimage
 from spectral import *
 
-def segmentation(bil, hdr, rotate_crop_params, lower_pixel_thresh=50, upper_pixel_thresh=3500):
+def segmentation(bil, hdr, rotate_crop_params, savepath, lower_pixel_thresh=50, upper_pixel_thresh=3500, band=80, return_segment = False):
     '''
     =======================================
     == VISION SEGMENTATION OF HYPERCUBE  ==
@@ -26,7 +26,10 @@ def segmentation(bil, hdr, rotate_crop_params, lower_pixel_thresh=50, upper_pixe
 
     # load spectral hypercube
     hypercube = envi.open(hdr, bil).load()  # load datacude
-    singleband = hypercube[:, :, 20]  # grab a single band to use for segmentation
+    singleband = hypercube[:, :, band]  # grab a single band to use for segmentation
+    imshow(singleband)
+    plt.title('Single Band')
+    plt.show()
     singleband = (singleband / singleband.max() * 255).astype("uint8")
     # plot raw image
     imshow(hypercube, bands=(154, 78, 27))  # R: 154, G: 78, B: 27
@@ -43,6 +46,7 @@ def segmentation(bil, hdr, rotate_crop_params, lower_pixel_thresh=50, upper_pixe
     # plot cropped image
     imshow(hypercube, bands=(154, 78, 27))  # R: 154, G: 78, B: 27
     plt.title('Cropped Image')
+    plt.savefig(savepath+'\\raw_image.png', dpi=300, bbox_inches='tight')
     plt.show()
     # transpose to segment along print direction
     singlebandT = ndimage.rotate(singleband, -90)
@@ -55,6 +59,7 @@ def segmentation(bil, hdr, rotate_crop_params, lower_pixel_thresh=50, upper_pixe
     ax.imshow(watershed.T, cmap='viridis')
     ax.invert_yaxis()
     plt.title('Segmented Image')
+    plt.savefig(savepath+'\\segmented_image.png', dpi=300, bbox_inches='tight')
     plt.show()
     # extract spectra from segmentation and format data
     idx_min = np.unique(watershed)[1:].min()
@@ -86,9 +91,13 @@ def segmentation(bil, hdr, rotate_crop_params, lower_pixel_thresh=50, upper_pixe
     plt.ylabel(r'Reflectance, $R$ (a.u.)')
     fig.colorbar(mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=0, vmax=100), cmap=mpl.cm.viridis), label='%MA')
     plt.title('Extracted Reflectance Spectra')
+    plt.savefig(savepath+'\\extracted_reflectace.png', dpi=300, bbox_inches='tight')
     plt.show()
-
-    return data
+    
+    if return_segment:
+        return data, watershed.T
+    else:
+        return data
 
 
 # Sub-functions for segmentation()
@@ -108,7 +117,7 @@ def segment_on_dt(a, img, threshold):
         lab:       Indices of each segmented droplet
     '''
     # estimate the borders of droplets based on known and unknown background + foreground (computed using dilated and erode)
-    kernel = np.ones((5, 5), np.uint8)
+    kernel = np.ones((3, 3), np.uint8)
     border = cv2.dilate(img, None, iterations=1)
 #     border = cv2.erode(border, kernel)
     border = border - cv2.erode(border, kernel)
@@ -149,9 +158,9 @@ def watershed_segment(image, small_elements_pixels=0, large_elements_pixels=9999
                                # threshold image using Otsu's binarization # https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
                                cv2.THRESH_OTSU)
     img_bin = cv2.morphologyEx(img_bin, cv2.MORPH_OPEN,
-                               np.ones((12, 12), dtype=int))
-    img_bin = cv2.erode(img_bin, np.ones((3, 3), np.uint8))
-    img_bin = cv2.medianBlur(img_bin, 7)
+                               np.ones((15, 15), dtype=int))
+    img_bin = cv2.erode(img_bin, np.ones((2, 2), np.uint8))
+    img_bin = cv2.medianBlur(img_bin, 5)
     result, water, labs = segment_on_dt(a=img, img=img_bin,
                                         threshold=RGB_threshold)  # segment droplets from background and return indexed droplets
     water = cv2.dilate(water.astype('uint8'), np.ones((5, 5), np.uint8))
