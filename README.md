@@ -1,4 +1,4 @@
-# Automatic-Band-Gap-Extractor
+# Autocharacterization-Bandgap
 ______________________________________________
 
 # Table of Contents
