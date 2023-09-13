@@ -1,12 +1,12 @@
 # Autocharacterization-Bandgap
 ______________________________________________
 
+<img src="./HS/auto_bandgap_extraction_R1.png" width="500" />
+
 # Table of Contents
 - [Package Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
-
-<img src="./HS/auto_bandgap_extraction_R1.png" width="500" />
 
 # Description:
 
