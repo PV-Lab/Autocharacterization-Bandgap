@@ -16,6 +16,21 @@ This package was made for materials printed using a High-Throughput (HT) Combina
 
 The author of this package is Alexander E Siemenn (PhD in Mechanical Engineering MIT Starting class of 2019), for any questions regarding the package or how to use it please contact the Accelerated Materials Development for Sustainability Lab.   
 
+# How to Cite
+Please cite our paper if you use this code:
+
+    @article{siemenn2024using,
+    title={Using scalable computer vision to automate high-throughput semiconductor characterization},
+    author={Siemenn, Alexander E and Aissi, Eunice and Sheng, Fang and Tiihonen, Armi and Kavak, Hamide and Das, Basita and Buonassisi, Tonio},
+    journal={Nature Communications},
+    volume={15},
+    number={1},
+    pages={4654},
+    year={2024},
+    publisher={Nature Publishing Group UK London}
+    }
+
+
 | Folders | Description |
 | ------------- | ------------------------------ |
 |[Bandgap](./BandGap) | An empty folder that will be populated with:, the Tauc plots for each material, a csv of the computed bang gaps, an image of the composition mapping for the materials, the extracte reflectance spectra for all materials, a figure of band gap vs composition of the materials, the cropped image of the materials, the results of the vision segmentation algorithm|
